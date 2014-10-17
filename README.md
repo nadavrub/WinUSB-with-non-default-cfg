@@ -12,3 +12,13 @@ Solution Structure:<br />
 UsbCfgCtrl -          The lower filter KDMF driver used to set the desiered USB configuration<br />
 UsbCfgCtrl Package -  The Driver deployment package<br />
 WinUSBSimple -        A simple Console application demonstrating WinUSB usage with the non-default configuration<br />
+
+Usage:
+1. Update USB\VID_nnnn&PID_nnnn at UsbCfgCtrl.inx in accordance with the designated HW.
+2. Compile 'UsbCfgCtrl' and 'WinUSBSimple'<br />
+3. Open 'UsbCfgCtrl Package' Property pages and check [X] 'Enable Deployment' under 'Driver Install'->'Deployment'
+4. Select the Target machine, this machine should be provisioned for driver development, see the following link for details:
+   http://msdn.microsoft.com/en-us/library/windows/hardware/dn265573(v=vs.85).aspx
+5. Deploy by running 'UsbCfgCtrl Package'
+6. On the target machine Device manager verify the driver is properly functioning
+7. Remote Debug 'WinUSBSimple.exe' on the target machine.
