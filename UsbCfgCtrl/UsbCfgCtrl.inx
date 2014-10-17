@@ -1,0 +1,114 @@
+;
+; UsbCfgCtrl.inf
+;
+; Installs WinUsb
+;
+
+[Version]
+Signature = "$Windows NT$"
+Class     = USBDevice
+ClassGUID = {88BAE032-5A81-49f0-BC3D-A4FF138216D6}
+Provider = %ManufacturerName%
+CatalogFile=UsbCfgCtrl.cat
+
+; ========== Manufacturer/Models sections ===========
+
+[Manufacturer]
+%ManufacturerName% = Standard,NT$ARCH$
+
+[Standard.NT$ARCH$]
+%DeviceName%=USB_Install, USB\VID_nnnn&PID_nnnn
+
+; ========== Class definition ===========
+
+[ClassInstall32]
+AddReg = ClassInstall_AddReg
+
+[ClassInstall_AddReg]
+HKR,,,0,%ClassName%
+HKR,,NoInstallClass,,1
+HKR,,IconPath,%REG_MULTI_SZ%,"%systemroot%\system32\setupapi.dll,-20"
+HKR,,LowerLogoVersion,,5.2
+
+; =================== Installation ===================
+
+[USB_Install]
+Include=winusb.inf
+Needs=WINUSB.NT
+CopyFiles=UsbCfgCtrl_CopyFiles
+
+[USB_Install.Services]
+Include=winusb.inf
+AddService=UsbCfgCtrl,,UsbCfgCtrl_FilterInstall
+AddService=WinUsb,0x00000002,WinUsb_ServiceInstall
+
+[WinUsb_ServiceInstall]
+DisplayName     = %WinUsb_SvcDesc%
+ServiceType     = 1
+StartType       = 3
+ErrorControl    = 1
+ServiceBinary   = %12%\WinUSB.sys
+LoadOrderGroup  = Extended Base
+
+[UsbCfgCtrl_FilterInstall]
+DisplayName    = %UsbCfgCtrl_DeviceDesc%
+ServiceType    = 1
+StartType      = 3
+ErrorControl   = 1
+ServiceBinary  = %12%\UsbCfgCtrl.sys
+
+[USB_Install.HW]
+AddReg=WinUSB_AddReg
+AddReg=UsbCfgCtrl_AddReg
+
+[WinUSB_AddReg]
+HKR,,DeviceInterfaceGUIDs,0x10000,"{adf8702c-8857-4204-992f-61a93eb9f0c1}"
+
+[UsbCfgCtrl_AddReg]
+HKR,,"LowerFilters",0x00010000,"UsbCfgCtrl" ; 0x00010000 == REG_MULTI_SZ
+HKR,,"DefaultCfgIndex",0x00010001,"1"		; 0x00010001 == REG_DWORD
+
+[USB_Install.CoInstallers]
+AddReg=CoInstallers_AddReg
+CopyFiles=WinUSB_CoInstallersCopyFiles
+
+[CoInstallers_AddReg]
+HKR,,CoInstallers32,0x00010000,"WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
+
+[WinUSB_CoInstallersCopyFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
+
+[DestinationDirs]
+DefaultDestDir=12
+UsbCfgCtrl_CopyFiles=12
+WinUSB_CoInstallersCopyFiles=11
+
+[UsbCfgCtrl_CopyFiles]
+UsbCfgCtrl.sys
+
+; ================= Source Media Section =====================
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1
+UsbCfgCtrl.sys=1
+
+[USB_Install.Wdf]
+KmdfService = UsbCfgCtrl, UsbCfgCtrl_wdfsect
+
+[UsbCfgCtrl_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+; =================== Strings ===================
+
+[Strings]
+ManufacturerName="NewComp Inc"
+ClassName="Universal Serial Bus devices"
+DiskName="USB_Capture Installation Disk"
+WinUsb_SvcDesc="NewComp WinUSB Function"
+DeviceName="NewComp USB Capture Device"
+UsbCfgCtrl_DeviceDesc="NewComp KMDF Filter"
+REG_MULTI_SZ = 0x00010000
+
