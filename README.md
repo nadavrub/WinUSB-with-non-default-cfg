@@ -15,9 +15,9 @@ WinUSBSimple -        A simple Console application demonstrating WinUSB usage wi
 
 Usage:<br />
 1. Update USB\VID_nnnn&PID_nnnn at UsbCfgCtrl.inx in accordance with the designated HW.<br />
-2. Compile 'UsbCfgCtrl' and 'WinUSBSimple'<br /><br />
+2. Compile 'UsbCfgCtrl' and 'WinUSBSimple'<br />
 3. Open 'UsbCfgCtrl Package' Property pages and check [X] 'Enable Deployment' under 'Driver Install'->'Deployment'<br />
-4. Select the Target machine, this machine should be provisioned for driver development, see the following link for details:<br />
+4. Select Target machine, this machine should be provisioned for driver development, see the following for details:<br />
    http://msdn.microsoft.com/en-us/library/windows/hardware/dn265573(v=vs.85).aspx<br />
 5. Deploy by running 'UsbCfgCtrl Package'<br />
 6. On the target machine Device manager verify the driver is properly functioning<br />
